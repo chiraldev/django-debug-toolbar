@@ -79,6 +79,7 @@ class TemplatesPanel(Panel):
             return
 
         context_list = []
+        
         for context_layer in context.dicts:
             temp_layer = {}
             if hasattr(context_layer, 'items'):
@@ -116,11 +117,14 @@ class TemplatesPanel(Panel):
                         finally:
                             recording(True)
             try:
-                context_list.append(pformat(temp_layer))
+                context_list.append(temp_layer)
             except UnicodeEncodeError:
                 pass
-
-        kwargs['context'] = [force_text(item) for item in context_list]
+        context_output = {}
+        for item in context_list:
+            for key, value in item.items():
+                context_output[key] = force_text(value)
+        kwargs['context'] = context_output
         kwargs['context_processors'] = getattr(context, 'context_processors', None)
         self.templates.append(kwargs)
 
@@ -167,7 +171,7 @@ class TemplatesPanel(Panel):
             # Clean up context for better readability
             if self.toolbar.config['SHOW_TEMPLATE_CONTEXT']:
                 context_list = template_data.get('context', [])
-                info['context'] = '\n'.join(context_list)
+                info['context'] = context_list
             template_context.append(info)
 
         # Fetch context_processors/template_dirs from any template

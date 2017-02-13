@@ -19,7 +19,33 @@
 	{% if template.context %}
 	<dd>
 		<div class="djTemplateShowContextDiv"><a class="djTemplateShowContext"><span class="toggleArrow">&#x25B6;</span> {% trans "Toggle context" %}</a></div>
-		<div class="djTemplateHideContextDiv djdt-hidden"><code>{{ template.context }}</code></div>
+		<div class="djTemplateHideContextDiv djdt-hidden"><code>
+			<table>
+			<thead>
+				<tr>
+					<th>
+						Variable
+					</th>
+					<th>
+						Value
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for key,value in template.context.items %}
+			<tr>
+				<td>
+					{{ key }}
+				</td>
+				<td>
+					{{ value }}
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+			
+			</table>
+		</code></div>
 	</dd>
 	{% endif %}
 {% endfor %}
